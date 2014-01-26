@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity2"
+            android:name=".GroceryList"
             android:label="Activity2" >
         </activity>
                 <activity

@@ -8,13 +8,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class Home extends Activity 
 { 
 	Button btnRandom;
-	Button btnUserInput;
+	Button btnUserInput; 
 	
 	// arbitrary interprocess communication ID (just a nickname!)
 	private final int IPC_ID = (int) (10001 * Math.random());
@@ -22,16 +24,21 @@ public class Home extends Activity
 	@Override
 	public void onCreate(Bundle savedInstanceState) 
 	{
-		super.onCreate(savedInstanceState); 
+		super.onCreate(savedInstanceState);  
 		try 
 		{
 			setContentView(R.layout.home);
+			
+		    ScrollView sv = new ScrollView(this);
+		    final LinearLayout ll = new LinearLayout(this);
+		    ll.setOrientation(LinearLayout.VERTICAL);
+		    sv.addView(ll); 
 						
 			btnRandom = (Button) findViewById(R.id.btnSumValues); 
 			btnRandom.setOnClickListener(new Clicker1());
 			
 			btnUserInput = (Button) findViewById(R.id.btnUserInput); 
-			btnUserInput.setOnClickListener(new Clicker_UserInput());
+			btnUserInput.setOnClickListener(new Clicker_UserInput()); 
 		} 
 		
 		catch (Exception e) 
@@ -49,7 +56,7 @@ public class Home extends Activity
 			{			
 				// create an Intent to talk to Activity2
 				Intent myIntentA1A2 = new Intent(Home.this,
-												 Activity2.class);			
+												 GroceryList.class);			
 				
 				// call Activity2 and wait for results
 				startActivityForResult(myIntentA1A2, IPC_ID);
@@ -71,7 +78,7 @@ public class Home extends Activity
 			{				
 				// create an Intent to talk to Activity2
 				Intent myIntentA1A2 = new Intent(Home.this,
-												 Activity2.class);			
+												 GroceryList.class);			
 				
 				// call Activity2 and wait for results
 				startActivityForResult(myIntentA1A2, IPC_ID);

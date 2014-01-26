@@ -15,7 +15,7 @@
             android:layout_alignBaseline="@+id/btnSumValues"
             android:layout_alignBottom="@+id/btnSumValues"
             android:text="Grocery List" />
-
+ 
         <Button
             android:id="@+id/btnSumValues"
             android:layout_width="match_parent"

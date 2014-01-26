@@ -12,6 +12,9 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.http.HttpEntity;
@@ -22,6 +25,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Intent;
 import android.media.JetPlayer.OnJetEventListener;
@@ -31,19 +35,25 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class Activity2 extends Activity 
+public class GroceryList extends Activity 
 {
-    TextView txtIncomingData;
+    LinearLayout ll;
+	TextView txtIncomingData; 
     TextView txtGroceries;
     Button   btnCallActivity1;
+    CheckBox checkBox;
     
     @Override
     public void onCreate(Bundle savedInstanceState) 
     {
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState); 
         setContentView(R.layout.grocery_list);
+                
+        ll = (LinearLayout) findViewById(R.id.linLayout);
         
         // /////////////////////////////////////////////////////////////
         // create a local Intent handler – we have been called!
@@ -53,7 +63,7 @@ public class Activity2 extends Activity
         btnCallActivity1.setOnClickListener(new Clicker1());
         
         StrictMode.enableDefaults(); //STRICT MODE ENABLED
-        txtGroceries = (TextView) findViewById(R.id.txtGroceryList);
+        //txtGroceries = (TextView) findViewById(R.id.txtGroceryList);
          
          getData();
         
@@ -79,7 +89,8 @@ public class Activity2 extends Activity
         }
     	
         //convert response to string
-        try{
+        try
+        {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(isr,"iso-8859-1"),8);
                 StringBuilder sb = new StringBuilder();
                 String line = null;
@@ -103,14 +114,37 @@ public class Activity2 extends Activity
     	   String s = "";
     	   JSONArray jArray = new JSONArray(result);
     	   
+    	   LinkedHashMap<Integer, String> groceryList = new LinkedHashMap<Integer, String>();
+    	   
     	   for(int i=0; i<jArray.length();i++)
     	   {
     		   JSONObject json = jArray.getJSONObject(i);
-    		   s = s + 
-    				   json.getString("description")+"\n";
+    		   //s = s + 
+    				   //json.getString("description")+"\n";
+    		   
+    		   groceryList.put(i, json.getString("description"));
     	   }
     	   
-    	   txtGroceries.setText(s);
+    	   //txtGroceries.setText(s); 
+    	   
+    	   Set<?> set = groceryList.entrySet();
+    	   // Get an iterator
+    	   Iterator<?> i = set.iterator();
+    	   
+    	   // Display elements
+    	   while (i.hasNext()) 
+    	   {
+	    	    @SuppressWarnings("rawtypes")
+	    	    Map.Entry me = (Map.Entry) i.next();
+	    	    System.out.print(me.getKey() + ": ");
+	    	    System.out.println(me.getValue());
+	
+	    	    checkBox = new CheckBox(this);
+	    	    checkBox.setId(Integer.parseInt(me.getKey().toString()));
+	    	    checkBox.setText(me.getValue().toString());
+	    	    //checkBox.setOnClickListener(getOnClickDoSomething(checkBox));
+	    	    ll.addView(checkBox);
+    	   }
     	
        } 
        
